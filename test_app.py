@@ -9,7 +9,6 @@ def test_objects_endpoint():
     response = client.get("/objects?start_date=2023-01-10&end_date=2023-01-20")
     assert response.status_code == 200
     response_data = json.loads(response.text)
-    print(response_data)
     assert isinstance(response_data, list)
     assert len(response_data) > 0
     for obj in response_data:
