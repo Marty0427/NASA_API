@@ -41,14 +41,14 @@ def get_neo_objects(start_date: str = Query(..., description='Start date (YYYY-M
                 if datetime.strptime(date, '%Y-%m-%d') > end_date:
                     continue
 
-                near_earth_object = data['near_earth_objects'][date][0]
-                neo_object = {
-                    'name': near_earth_object['name'],
-                    'size': near_earth_object['estimated_diameter']['meters']['estimated_diameter_max'],
-                    'closest_approach_date': near_earth_object['close_approach_data'][0]['close_approach_date'],
-                    'closest_approach_distance': near_earth_object['close_approach_data'][0]['miss_distance']['kilometers']
-                }
-                results.append(neo_object)
+                for near_earth_object in data['near_earth_objects'][date]:
+                    neo_object = {
+                        'name': near_earth_object['name'],
+                        'size': near_earth_object['estimated_diameter']['meters']['estimated_diameter_max'],
+                        'closest_approach_date': near_earth_object['close_approach_data'][0]['close_approach_date'],
+                        'closest_approach_distance': near_earth_object['close_approach_data'][0]['miss_distance']['kilometers']
+                    }
+                    results.append(neo_object)
         start_date += delta
     if not results:
         raise HTTPException(status_code=404, detail='No near-earth objects found in date range')
